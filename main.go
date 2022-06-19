@@ -24,7 +24,6 @@ func main() {
 	// b.Use(middleware.Logger())
 	b.Handle("/w", func(c tele.Context) error {
 		tags := c.Args()
-		fmt.Println(tags)
 		if len(tags) == 1 {
 			w, err := Fetch_address(tags[0])
 			if err != nil {
