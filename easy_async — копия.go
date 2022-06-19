@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"sync"
 )
@@ -16,16 +15,4 @@ func fetch() {
 	}
 	globallist = append(globallist, response.StatusCode)
 	wg.Done()
-}
-
-
-func main() {
-	n := 1000
-	wg.Add(n)
-	for i := 0; i < n; i++ {
-		go fetch()
-	}
-wg.Wait()
-fmt.Print(globallist)
-
 }
