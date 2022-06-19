@@ -31,7 +31,7 @@ func main() {
 			}
 			msg := fmt.Sprintf("BTC:%s  ---  USD:%s", w.balance_in_btc, w.balance_in_usd)
 			return c.Send(msg)
-		// }
+		}
 		return c.Send("No Address")
 	})
 	b.Start()
