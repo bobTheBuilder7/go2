@@ -2,12 +2,38 @@ package main
 
 import (
 	"fmt"
+	"log"
+
+	_ "os"
+	"time"
+
+	tele "gopkg.in/telebot.v3"
+	// middleware "gopkg.in/telebot.v3/middleware"
 )
 
 func main() {
-	w, err := Fetch_address("34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo")
-	if err != nil {
-		panic(err)
+	pref := tele.Settings{
+		Token:  "5571023482:AAE_FPgpJ0CLPf4zKjtgMaQD7dUY7mz-vVI",
+		Poller: &tele.LongPoller{Timeout: 10 * time.Second},
 	}
-	fmt.Println(w)
+
+	b, err := tele.NewBot(pref)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// b.Use(middleware.Logger())
+	b.Handle("/w", func(c tele.Context) error {
+		tags := c.Args()
+		fmt.Println(tags)
+		if len(tags) == 1 {
+			w, err := Fetch_address(tags[0])
+			if err != nil {
+				return c.Send("No Such Address")
+			}
+			msg := fmt.Sprintf("BTC:%s  ---  USD:%s", w.balance_in_btc, w.balance_in_usd)
+			return c.Send(msg)
+		}
+		return c.Send("No Address")
+	})
+	b.Start()
 }

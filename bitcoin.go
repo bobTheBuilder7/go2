@@ -21,21 +21,20 @@ func Fetch_address(address string) (Wallet, error) {
 	if err != nil {
 		return Wallet{}, errors.New(string(response.StatusCode))
 	}
-
 	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		panic(err)
+		return Wallet{}, err
 	}
 	doc, err := gokogiri.ParseHtml(body)
 	if err != nil {
-		panic(err)
+		return Wallet{}, err
 	}
 	defer doc.Free()
 	xps := xpath.Compile("/html/body/div[1]/div[3]/div[2]/div/div/div[1]/div/div[3]/span")
 	ss, err := doc.Search(xps)
 	if err != nil {
-		panic(err)
+		return Wallet{}, err
 	}
 	data := ss[0].String()
 	ind := strings.Index(data, "address is")
