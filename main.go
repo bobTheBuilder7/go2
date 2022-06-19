@@ -13,7 +13,7 @@ import (
 
 func main() {
 	pref := tele.Settings{
-		Token:  "5571023482:AAE_FPgpJ0CLPf4zKjtgMaQD7dUY7mz-vVI",
+		Token:  "5571023482:AAHglns0AvWfe6ysclpZG9JfE3NKK0lJMGw",
 		Poller: &tele.LongPoller{Timeout: 10 * time.Second},
 	}
 
