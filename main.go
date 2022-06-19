@@ -8,7 +8,7 @@ import (
 	"time"
 
 	tele "gopkg.in/telebot.v3"
-	// "gopkg.in/telebot.v3/middleware"
+	"gopkg.in/telebot.v3/middleware"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// b.Use(middleware.Logger())
+	b.Use(middleware.Logger())
 	b.Handle("/w", func(c tele.Context) error {
 		tags := c.Args()
 		if len(tags) == 1 {
@@ -31,7 +31,7 @@ func main() {
 			}
 			msg := fmt.Sprintf("BTC:%s  ---  USD:%s", w.balance_in_btc, w.balance_in_usd)
 			return c.Send(msg)
-		}
+		// }
 		return c.Send("No Address")
 	})
 	b.Start()
