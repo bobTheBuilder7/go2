@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 	b.Use(middleware.Logger())
-	b.Handle("/w", func(c tele.Context) error {
+	b.Handle("/btc", func(c tele.Context) error {
 		tags := c.Args()
 		if len(tags) == 1 {
 			w, err := Fetch_address(tags[0])
