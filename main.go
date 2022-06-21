@@ -6,10 +6,20 @@ import (
 
 	_ "os"
 	"time"
-
+	"github.com/go-co-op/gocron"
 	tele "gopkg.in/telebot.v3"
-	"gopkg.in/telebot.v3/middleware"
 )
+var btc_price string
+
+
+func init() {
+	s := gocron.NewScheduler(time.UTC)
+
+	s.Every(60).Seconds().Do(func(){
+		btc_price = get_btc_price()
+	})
+	s.StartAsync()
+}
 
 func main() {
 	pref := tele.Settings{
@@ -21,11 +31,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	b.Use(middleware.Logger())
+
 	b.Handle("/btc", func(c tele.Context) error {
 		tags := c.Args()
 		if len(tags) == 1 {
-			w, err := Fetch_address(tags[0])
+			w, err := fetch_address(tags[0])
 			if err != nil {
 				return c.Send("No Such Address")
 			}
@@ -33,6 +43,10 @@ func main() {
 			return c.Send(msg)
 		}
 		return c.Send("No Address")
+	})
+
+	b.Handle("price", func(c tele.Context) error {
+		return c.Send(btc_price)
 	})
 	b.Start()
 }

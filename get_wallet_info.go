@@ -16,7 +16,7 @@ type Wallet struct {
 	balance_in_usd string
 }
 
-func Fetch_address(address string) (Wallet, error) {
+func fetch_address(address string) (Wallet, error) {
 	response, err := http.Get(fmt.Sprintf("https://www.blockchain.com/btc/address/%s", address))
 	if err != nil {
 		return Wallet{}, errors.New(string(response.StatusCode))
