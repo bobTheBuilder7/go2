@@ -19,7 +19,7 @@ type Wallet struct {
 func fetch_address(address string) (Wallet, error) {
 	response, err := http.Get(fmt.Sprintf("https://www.blockchain.com/btc/address/%s", address))
 	if err != nil {
-		return Wallet{}, errors.New(string(response.StatusCode))
+		return Wallet{}, errors.New(string(rune(response.StatusCode)))
 	}
 	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
