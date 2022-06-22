@@ -1,1 +1,1 @@
-web: bin/go2
+web: go2
