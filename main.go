@@ -17,6 +17,7 @@ func init() {
 
 	s.Every(60).Seconds().Do(func(){
 		btc_price = get_btc_price()
+		log.Println(btc_price)
 	})
 	s.StartAsync()
 }
