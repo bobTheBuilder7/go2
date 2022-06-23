@@ -32,7 +32,36 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	var (
+		selector = &tele.ReplyMarkup{}
+		btnPrev = selector.Data("⬅", "prev")
+		btnNext = selector.Data("➡", "next")
+	)
+	
+	selector.Inline(
+		selector.Row(btnPrev),
+	)
+	
+	b.Handle("/start", func(c tele.Context) error {
+		return c.Send("Привет! Этот бот посвящён личности сурена", selector)
+	})
+	
+	b.Handle(&btnPrev, func(c tele.Context) error {
+		return c.Respond()
+	})
+	b.Handle(&btnNext, func(c tele.Context) error {
+		return c.Edit("")
+	})
 
+
+
+
+	
+	
+	
+	
+	
+	
 	b.Handle("/btc", func(c tele.Context) error {
 		tags := c.Args()
 		if len(tags) == 1 {
@@ -46,7 +75,7 @@ func main() {
 		return c.Send("No Address")
 	})
 
-	b.Handle("price", func(c tele.Context) error {
+	b.Handle("/price", func(c tele.Context) error {
 		return c.Send(btc_price)
 	})
 	b.Start()
