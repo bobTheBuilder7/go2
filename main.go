@@ -45,6 +45,10 @@ func main() {
 	b.Handle("/suren", func(c tele.Context) error {
 		return c.Send("Привет! Этот бот посвящён личности сурена", selector)
 	})
+	b.Handle("/start", func(c tele.Context) error {
+		return c.Send("Привет! Этот бот посвящён личности сурена", selector)
+	})
+	
 	
 	b.Handle(&btnPrev, func(c tele.Context) error {
 		return c.Respond()
