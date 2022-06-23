@@ -42,7 +42,7 @@ func main() {
 		selector.Row(btnPrev),
 	)
 	
-	b.Handle("/start", func(c tele.Context) error {
+	b.Handle("/suren", func(c tele.Context) error {
 		return c.Send("Привет! Этот бот посвящён личности сурена", selector)
 	})
 	
