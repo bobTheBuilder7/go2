@@ -6,20 +6,48 @@ import (
 
 	_ "os"
 	"time"
+
 	"github.com/go-co-op/gocron"
 	tele "gopkg.in/telebot.v3"
 )
+
+var (
+	firstPage     = &tele.ReplyMarkup{}
+	fToFirstPage  = firstPage.Data("· 1 ·", "b1")
+	fToSecondPage = firstPage.Data("2", "b2")
+)
+
+// Creating first page keyboard
+func init() {
+	firstPage.Inline(
+		firstPage.Row(fToFirstPage, fToSecondPage),
+	)
+}
+
+var (
+	secondPage    = &tele.ReplyMarkup{}
+	sToFirstPage  = secondPage.Data("1", "b3")
+	sToSecondPage = secondPage.Data("· 2 ·", "b4")
+)
+
+// Creating second page keyboard
+func init() {
+	secondPage.Inline(
+		secondPage.Row(sToFirstPage, sToSecondPage),
+	)
+}
+
 var btc_price string
 
-
+// Go Cron for checking btc price once in 60 seconds
 func init() {
 	s := gocron.NewScheduler(time.UTC)
-
-	s.Every(60).Seconds().Do(func(){
+	s.Every(60).Seconds().Do(func() {
 		btc_price = get_btc_price()
 		log.Println(btc_price)
 	})
 	s.StartAsync()
+
 }
 
 func main() {
@@ -32,40 +60,24 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var (
-		selector = &tele.ReplyMarkup{}
-		btnPrev = selector.Data("⬅", "prev")
-		btnNext = selector.Data("➡", "next")
-	)
-	
-	selector.Inline(
-		selector.Row(btnPrev),
-	)
-	
-	b.Handle("/suren", func(c tele.Context) error {
-		return c.Send("Привет! Этот бот посвящён личности сурена", selector)
-	})
+
 	b.Handle("/start", func(c tele.Context) error {
-		return c.Send("Привет! Этот бот посвящён личности сурена", selector)
-	})
-	
-	
-	b.Handle(&btnPrev, func(c tele.Context) error {
-		return c.Respond()
-	})
-	b.Handle(&btnNext, func(c tele.Context) error {
-		return c.Edit("")
+		return c.Send("Первая страница", firstPage)
 	})
 
+	b.Handle(&fToFirstPage, func(c tele.Context) error {
+		return c.Edit("Первая страница", firstPage)
+	})
+	b.Handle(&fToSecondPage, func(c tele.Context) error {
+		return c.Edit("Вторая страница", secondPage)
+	})
+	b.Handle(&sToFirstPage, func(c tele.Context) error {
+		return c.Edit("Первая страница", firstPage)
+	})
+	b.Handle(&sToSecondPage, func(c tele.Context) error {
+		return c.Edit("Вторая страница", secondPage)
+	})
 
-
-
-	
-	
-	
-	
-	
-	
 	b.Handle("/btc", func(c tele.Context) error {
 		tags := c.Args()
 		if len(tags) == 1 {
